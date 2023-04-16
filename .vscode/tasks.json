@@ -7,6 +7,7 @@
         "label": "Generate Requirements",
         "type": "shell",
         "command": "python -m pigar generate",
+        "problemMatcher": []
       }
     ]
   }
