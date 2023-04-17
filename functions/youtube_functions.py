@@ -1,5 +1,6 @@
 import re
 import requests
+import xml.etree.ElementTree as ET
 
 
 def get_video_urls_from_channel_list_50(api_key, channel_ids):
@@ -56,6 +57,72 @@ def get_video_urls_from_channel_list_full(api_key, channel_ids):
                 break
 
     return video_urls
+
+
+def get_video_urls_from_channel_list_xml(channel_ids):
+    all_video_data = []
+
+    for channel_id in channel_ids:
+        url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            print(
+                f"Error: Unable to fetch data for channel_id {channel_id}. Status code: {response.status_code}"
+            )
+            continue
+
+        xml_content = response.content
+        root = ET.fromstring(xml_content)
+
+        for entry in root.findall("{http://www.w3.org/2005/Atom}entry"):
+            video_data = {}
+            title_element = entry.find("{http://www.w3.org/2005/Atom}title")
+            video_data["video_title"] = (
+                title_element.text if title_element is not None else None
+            )
+
+            published_element = entry.find("{http://www.w3.org/2005/Atom}published")
+            video_data["publish_date"] = (
+                published_element.text if published_element is not None else None
+            )
+
+            author_element = entry.find("{http://www.w3.org/2005/Atom}author")
+            if author_element is not None:
+                name_element = author_element.find("{http://www.w3.org/2005/Atom}name")
+                video_data["channel_title"] = (
+                    name_element.text if name_element is not None else None
+                )
+            else:
+                video_data["channel_title"] = None
+
+            video_data["channel_url"] = f"https://www.youtube.com/channel/{channel_id}"
+            video_id_element = entry.find(
+                "{http://www.youtube.com/xml/schemas/2015}videoId"
+            )
+            if video_id_element is not None:
+                video_data[
+                    "video_url"
+                ] = f"https://www.youtube.com/watch?v={video_id_element.text}"
+            else:
+                video_data["video_url"] = None
+
+            media_group = entry.find("{http://search.yahoo.com/mrss/}group")
+            if media_group is not None:
+                description_element = media_group.find(
+                    "{http://search.yahoo.com/mrss/}description"
+                )
+                video_data["video_description"] = (
+                    description_element.text
+                    if description_element is not None
+                    else None
+                )
+            else:
+                video_data["video_description"] = None
+
+            all_video_data.append(video_data)
+
+    return all_video_data
 
 
 def get_video_details(api_key, video_url):
