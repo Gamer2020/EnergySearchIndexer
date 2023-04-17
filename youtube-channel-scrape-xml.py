@@ -37,11 +37,13 @@ for video_data in all_video_data:
 
     if (
         functions.es_deck_functions.youtube_check_deck_exists(
-            video_data['video_url'], config_es_api_full_url, config_es_api_key
+            video_data["video_url"], config_es_api_full_url, config_es_api_key
         )
         == False
     ):
-        # functions.es_deck_functions.youtube_create_deck(
-        #     video_info, video_data['video_url'], config_es_api_full_url, config_es_api_key
-        # )
-        print("doesn't exist")
+        functions.es_deck_functions.youtube_create_deck(
+            video_info,
+            video_data["video_url"],
+            config_es_api_full_url,
+            config_es_api_key,
+        )
