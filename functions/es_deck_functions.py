@@ -5,7 +5,7 @@ import json
 # Create a new deck
 def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
     headers = {
-        "Authorization": f"Bearer {API_TOKEN}",
+        "X-Auth-Token": API_TOKEN,
         "Content-Type": "application/json",
     }
 
@@ -33,7 +33,7 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
 # Check If Deck Exits
 def youtube_check_deck_exists(deck_id, API_URL, API_TOKEN):
     headers = {
-        "Authorization": f"Bearer {API_TOKEN}",
+        "X-Auth-Token": API_TOKEN,
         "Content-Type": "application/json",
     }
 

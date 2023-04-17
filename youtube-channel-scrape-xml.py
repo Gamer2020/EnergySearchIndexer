@@ -27,18 +27,21 @@ for video_data in all_video_data:
     print(f"Video Description: {video_data['video_description']}")
     print()
 
-# for video_url in video_urls:
-#     video_info = functions.youtube_functions.get_video_details(
-#         config_youtube_api_key, video_url
-#     )
-#     print(video_url)
-#     print(video_info)
-#     if (
-#         functions.es_deck_functions.youtube_check_deck_exists(
-#             video_url, config_es_api_full_url, config_es_api_key
-#         )
-#         == False
-#     ):
-#         functions.es_deck_functions.youtube_create_deck(
-#             video_info, video_url, config_es_api_full_url, config_es_api_key
-#         )
+    video_info = {
+        "video_name": video_data["video_title"],
+        "channel_name": video_data["channel_title"],
+        "channel_url": video_data["channel_url"],
+        "publish_date": video_data["publish_date"],
+        "video_description": video_data["video_description"],
+    }
+
+    if (
+        functions.es_deck_functions.youtube_check_deck_exists(
+            video_data['video_url'], config_es_api_full_url, config_es_api_key
+        )
+        == False
+    ):
+        # functions.es_deck_functions.youtube_create_deck(
+        #     video_info, video_data['video_url'], config_es_api_full_url, config_es_api_key
+        # )
+        print("doesn't exist")
