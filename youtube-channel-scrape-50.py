@@ -8,8 +8,6 @@ with open("config.yml") as config_file:
 
 # Access the value of the list in the configuration data
 
-# print(config_data)
-
 config_es_api_base_url = config_data["config"]["es_api_url"]
 config_es_api_version = config_data["config"]["es_api_version"]
 config_es_api_full_url = config_es_api_base_url + config_es_api_version + "/"
@@ -29,6 +27,13 @@ for video_url in video_urls:
     )
     print(video_url)
     print(video_info)
-    if functions.es_deck_functions.youtube_check_deck_exists(video_url, config_es_api_full_url, config_es_api_key) == False:
-      functions.es_deck_functions.youtube_create_deck(video_info, video_url, config_es_api_full_url, config_es_api_key)
+    if (
+        functions.es_deck_functions.youtube_check_deck_exists(
+            video_url, config_es_api_full_url, config_es_api_key
+        )
+        == False
+    ):
+        functions.es_deck_functions.youtube_create_deck(
+            video_info, video_url, config_es_api_full_url, config_es_api_key
+        )
     break
