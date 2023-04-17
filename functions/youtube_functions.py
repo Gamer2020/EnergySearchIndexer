@@ -1,6 +1,6 @@
 import re
 import requests
-
+from bs4 import BeautifulSoup
 
 def get_video_urls_from_channel_list(api_key, channel_ids):
     video_urls = []
@@ -31,6 +31,21 @@ def get_video_urls_from_channel_list(api_key, channel_ids):
             next_page_token = response_json.get("nextPageToken")
             if not next_page_token:
                 break
+
+    return video_urls
+
+def get_video_urls_from_channel_list2(channel_ids):
+    video_urls = []
+
+    for channel_id in channel_ids:
+        base_url = f"https://www.youtube.com/channel/{channel_id}/videos"
+
+        response = requests.get(base_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        for video in soup.select("a[href*='/watch?v=']"):
+            video_url = "https://www.youtube.com" + video['href']
+            video_urls.append(video_url)
 
     return video_urls
 

@@ -18,10 +18,13 @@ config_youtube_api_key = config_data["config"]["youtube_api_key"]
 
 config_youtube_channels = config_data["config"]["youtube_channels"]
 
-video_urls = functions.youtube_functions.get_video_urls_from_channel_list(
-    config_youtube_api_key, config_youtube_channels
+video_urls = functions.youtube_functions.get_video_urls_from_channel_list2(
+    config_youtube_channels
 )
-# print(video_urls)
+# video_urls = functions.youtube_functions.get_video_urls_from_channel_list(
+#     config_youtube_api_key, config_youtube_channels
+# )
+print(video_urls)
 
 # for video_url in video_urls:
 #     video_info = functions.youtube_functions.get_video_details(
