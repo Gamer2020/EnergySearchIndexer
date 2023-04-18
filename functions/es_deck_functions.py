@@ -3,8 +3,8 @@ import json
 import re
 import os
 
-PTCGL_DECK_PATTERN = (
-    r'(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy).*?(?:\n\nTotal Cards: 60)?)'
+PTCGL_DECK_PATTERN = re.compile(
+    r"(?:(?:##?\s*Pok[eé]mon|Pok[eé]mon:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)(?:(?:##?\s*Trainer|Trainer:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)(?:(?:##?\s*Energy|Energy:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)"
 )
 
 
