@@ -3,8 +3,12 @@ import json
 import re
 import os
 
-PTCGL_DECK_PATTERN = re.compile(
-    r"(?:(?:##?\s*Pok[eé]mon|Pok[eé]mon:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)(?:(?:##?\s*Trainer|Trainer:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)(?:(?:##?\s*Energy|Energy:)\s*-?\s*\d*[\r\n]+(?:\*?\s*\d+\s+[\w\s'-]+[A-Z]+\s\d+(?:\sPH)?[\r\n]+)+)"
+PTCGL_DECK_PATTERN_1 = re.compile(
+    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy).*?(?:\n\nTotal Cards: 60)?)"
+)
+
+PTCGL_DECK_PATTERN_2 = re.compile(
+    r"(?s)((?:Pokemon).*?(?:Energy).*?(?:\n{1,2}Total Cards:? 60)?)"
 )
 
 
@@ -66,11 +70,16 @@ def youtube_check_deck_exists(deck_id, API_URL, API_TOKEN):
 def contains_deck(deck_string):
     if not deck_string:
         return False
-    return bool(re.search(PTCGL_DECK_PATTERN, deck_string))
+    return bool(
+        re.search(PTCGL_DECK_PATTERN_1, deck_string)
+        or re.search(PTCGL_DECK_PATTERN_2, deck_string)
+    )
 
 
 def get_deck(deck_string):
-    match = re.search(PTCGL_DECK_PATTERN, deck_string)
+    match = re.search(PTCGL_DECK_PATTERN_1, deck_string) or re.search(
+        PTCGL_DECK_PATTERN_2, deck_string
+    )
     return match.group(1) if match else None
 
 
