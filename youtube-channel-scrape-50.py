@@ -35,4 +35,3 @@ for video_url in video_urls:
         functions.es_deck_functions.youtube_create_deck(
             video_info, video_url, config_es_api_full_url, config_es_api_key
         )
-    break
