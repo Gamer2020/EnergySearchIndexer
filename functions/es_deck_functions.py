@@ -18,10 +18,11 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
     API_Target = API_URL + "decks/"
 
     if contains_deck(video_info["video_description"]) == True:
+        ptcgl_deck_list_text = get_deck(video_info["video_description"])
         video_info.pop("video_description", None)
         new_deck_data = {
             "deck_name": video_info["video_name"],
-            "cards": "card1,card2,card3",
+            "cards": ptcgl_deck_list_text,
             "visible": "YES",
             "source_type": "YOUTUBE",
             "source_info": video_info,
