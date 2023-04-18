@@ -4,7 +4,7 @@ import re
 import os
 
 PTCGL_DECK_PATTERN = (
-    r'(?s)(Pokémon: \d+.*\n\n(?:Trainer|Trainers): \d+.*\n\n(?:Energy|Energies): \d+.*(?:\n\nTotal Cards: 60)?)'
+    r'(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy).*?(?:\n\nTotal Cards: 60)?)'
 )
 
 
