@@ -1,16 +1,16 @@
 import requests
 import json
-import re
 import os
+import regex
 
-PTCGL_DECK_PATTERN_1 = re.compile(
-    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)"
+PTCGL_DECK_PATTERN_1 = regex.compile(
+    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)(?:(?<!\w{3}\s+\d+)\n|$)"
 )
 
 
-PTCGL_DECK_PATTERN_2 = re.compile(
-    r"(?s)((?:Pokemon).*?(?:Energy).*?(?:\n{1,2}Total Cards:? 60)?)"
-)
+# PTCGL_DECK_PATTERN_2 = re.compile(
+#     r"(?s)((?:Pokemon).*?(?:Energy).*?(?:\n{1,2}Total Cards:? 60)?)"
+# )
 
 
 # Create a new deck
@@ -87,17 +87,20 @@ def youtube_check_deck_exists(deck_id, API_URL, API_TOKEN):
 def contains_deck(deck_string):
     if not deck_string:
         return False
-    return bool(re.search(PTCGL_DECK_PATTERN_1, deck_string))
+    return bool(regex.search(PTCGL_DECK_PATTERN_1, deck_string))
 
 
 def get_deck(deck_string):
-    match = re.search(PTCGL_DECK_PATTERN_1, deck_string)
+    match = regex.search(PTCGL_DECK_PATTERN_1, deck_string)
     if match:
         deck_list = match.group(1)
         # Remove the "Pokémon:", "Trainer:", and "Energy:" lines and the "Total Cards: 60" line
-        deck_list = re.sub(r'(Pokémon|Trainer|Energy):|Total Cards: 60', '', deck_list)
+        deck_list = regex.sub(
+            r"(Pokémon|Trainer|Energy):|Total Cards: 60", "", deck_list
+        )
         return deck_list.strip()
     return None
+
 
 def debug_log_message(subfolder_name, file_name, text):
     # Create subfolder if it doesn't exist
