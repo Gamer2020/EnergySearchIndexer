@@ -105,6 +105,9 @@ def get_deck(deck_string):
             deck_list,
             flags=regex.MULTILINE | regex.IGNORECASE,
         )
+        # Remove extra newlines and spaces
+        deck_list = regex.sub(r"\n{2,}", "\n", deck_list)
+        deck_list = regex.sub(r"\s{2,}", " ", deck_list)
         return deck_list.strip()
     return None
 
