@@ -5,9 +5,8 @@ import regex
 
 PTCGL_DECK_PATTERN_1 = regex.compile(
     r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)(?:(?<!\w{3}\s+\d+)\n|$)",
-    flags=regex.IGNORECASE
+    flags=regex.IGNORECASE,
 )
-
 
 
 # PTCGL_DECK_PATTERN_2 = re.compile(
@@ -46,7 +45,10 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
         if response.status_code == 201:
             return response.json()
         else:
-            raise Exception(f"Error: {response.text}")
+            debug_log_message(
+                "debug", "response_errors.txt", "Error: {response.text}" + "\n"
+            )
+
     else:
         print("No deck list...")
         debug_log_message(
@@ -98,7 +100,10 @@ def get_deck(deck_string):
         deck_list = match.group(1)
         # Remove the "Pokémon:", "Trainer:", and "Energy:" lines and the "Total Cards: 60" line
         deck_list = regex.sub(
-            r"^(Pokémon|Trainer|Energy):.*$|Total Cards: 60", "", deck_list, flags=regex.MULTILINE | regex.IGNORECASE
+            r"^(Pokémon|Trainer|Energy):.*$|Total Cards: 60",
+            "",
+            deck_list,
+            flags=regex.MULTILINE | regex.IGNORECASE,
         )
         return deck_list.strip()
     return None
