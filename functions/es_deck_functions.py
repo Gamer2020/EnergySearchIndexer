@@ -4,8 +4,10 @@ import os
 import regex
 
 PTCGL_DECK_PATTERN_1 = regex.compile(
-    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)(?:(?<!\w{3}\s+\d+)\n|$)"
+    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)(?:(?<!\w{3}\s+\d+)\n|$)",
+    flags=regex.IGNORECASE
 )
+
 
 
 # PTCGL_DECK_PATTERN_2 = re.compile(
