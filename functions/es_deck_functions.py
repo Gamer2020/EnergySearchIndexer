@@ -4,7 +4,7 @@ import os
 import regex
 
 PTCGL_DECK_PATTERN_1 = regex.compile(
-    r"(?s)((?:Pokémon|##Pokémon).*?(?:Energy|##Energy)(?:.*?Total Cards: 60)?)(?:(?<!\w{3}\s+\d+)\n|$)",
+    r"(?s)((?:(?:##)?Pok[eé]mon).*?(?:(?:##)?Energy)(?:.*?Total Cards:\s*60)?)(?:(?<!\w{3}\s+\d+)\n|$)",
     flags=regex.IGNORECASE
 )
 
@@ -98,8 +98,11 @@ def get_deck(deck_string):
         deck_list = match.group(1)
         # Remove the "Pokémon:", "Trainer:", and "Energy:" lines and the "Total Cards: 60" line
         deck_list = regex.sub(
-            r"^(Pokémon|Trainer|Energy):.*$|Total Cards: 60", "", deck_list, flags=regex.MULTILINE | regex.IGNORECASE
+            r"(?i)(Pok[eé]mon|Trainer|Energy):|Total Cards: 60", "", deck_list
         )
+        # Remove extra newlines and spaces
+        deck_list = regex.sub(r"\n{2,}", "\n", deck_list)
+        deck_list = regex.sub(r"\s{2,}", " ", deck_list)
         return deck_list.strip()
     return None
 
