@@ -39,14 +39,15 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
             "expanded_legality": "Legal",
         }
 
-        response = requests.post(
-            API_Target, headers=headers, data=json.dumps(new_deck_data)
-        )
-        if response.status_code == 201:
-            return response.json()
-        else:
+        try:
+            response = requests.post(
+                API_Target, headers=headers, data=json.dumps(new_deck_data), timeout=10
+            )
+            if response.status_code == 201:
+                return response.json()
+        except (requests.exceptions.Timeout, requests.exceptions.HTTPError) as err:
             debug_log_message(
-                "debug", "response_errors.txt", "Error: {response.text}" + "\n"
+                "debug", "response_errors.txt", "Error: " + str(err) + "\n"
             )
 
     else:
