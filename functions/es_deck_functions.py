@@ -96,7 +96,7 @@ def get_deck(deck_string):
         deck_list = match.group(1)
         # Remove the "Pokémon:", "Trainer:", and "Energy:" lines and the "Total Cards: 60" line
         deck_list = regex.sub(
-            r"(Pokémon|Trainer|Energy):|Total Cards: 60", "", deck_list
+            r"^(Pokémon|Trainer|Energy):.*$|Total Cards: 60", "", deck_list, flags=regex.MULTILINE | regex.IGNORECASE
         )
         return deck_list.strip()
     return None
