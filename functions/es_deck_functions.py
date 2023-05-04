@@ -33,7 +33,7 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
             "source_type": "YOUTUBE",
             "source_info": video_info,
             "source_identifier": video_url,
-            "featuredcard": "Good Card",
+            "featuredcard": "base1-58",
             "unlimited_legality": "Legal",
             "standard_legality": "Legal",
             "expanded_legality": "Legal",
