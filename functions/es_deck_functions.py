@@ -9,11 +9,6 @@ PTCGL_DECK_PATTERN_1 = regex.compile(
 )
 
 
-# PTCGL_DECK_PATTERN_2 = re.compile(
-#     r"(?s)((?:Pokemon).*?(?:Energy).*?(?:\n{1,2}Total Cards:? 60)?)"
-# )
-
-
 # Create a new deck
 def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
     headers = {
@@ -73,22 +68,6 @@ def youtube_check_deck_exists(deck_id, API_URL, API_TOKEN):
         return False
 
 
-# def contains_deck(deck_string):
-#     if not deck_string:
-#         return False
-#     return bool(
-#         re.search(PTCGL_DECK_PATTERN_1, deck_string)
-#         or re.search(PTCGL_DECK_PATTERN_2, deck_string)
-#     )
-
-
-# def get_deck(deck_string):
-#     match = re.search(PTCGL_DECK_PATTERN_1, deck_string) or re.search(
-#         PTCGL_DECK_PATTERN_2, deck_string
-#     )
-#     return match.group(1) if match else None
-
-
 def contains_deck(deck_string):
     if not deck_string:
         return False
@@ -99,7 +78,6 @@ def get_deck(deck_string):
     match = regex.search(PTCGL_DECK_PATTERN_1, deck_string)
     if match:
         deck_list = match.group(1)
-        # Remove the "Pokémon:", "Trainer:", and "Energy:" lines and the "Total Cards: 60" line
         deck_list = regex.sub(
             r"^(Pokémon|Trainer|Energy):.*$|Total Cards: 60",
             "",
@@ -127,16 +105,3 @@ def debug_log_message(subfolder_name, file_name, text):
     # Append text to file
     with open(file_path, "a") as f:
         f.write(text)
-
-
-# Get a deck by id
-# def youtube_get_deck(deck_id, API_URL, API_TOKEN):
-#     headers = {
-#         "Authorization": f"Bearer {API_TOKEN}",
-#         "Content-Type": "application/json",
-#     }
-#     response = requests.get(API_URL, headers=headers, params={"id": deck_id})
-#     if response.status_code == 200:
-#         return response.json()
-#     else:
-#         raise Exception(f"Error: {response.text}")
