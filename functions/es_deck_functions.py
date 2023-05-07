@@ -36,7 +36,7 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
 
         try:
             response = requests.post(
-                API_Target, headers=headers, data=json.dumps(new_deck_data), timeout=10
+                API_Target, headers=headers, data=json.dumps(new_deck_data), timeout=30
             )
             if response.status_code == 201:
                 return response.json()
