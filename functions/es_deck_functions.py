@@ -4,9 +4,10 @@ import os
 import regex
 
 PTCGL_DECK_PATTERN_1 = regex.compile(
-    r"(?s)((?<=\n|^)(?:\d+.*\n)+)",
+    r"(?s)((?<=\n|^).*\d+.*\n)+",
     flags=regex.IGNORECASE,
 )
+
 
 
 # Create a new deck
@@ -84,11 +85,14 @@ def get_deck(deck_string):
             deck_list,
             flags=regex.MULTILINE | regex.IGNORECASE,
         )
+        # Remove leading characters on each line
+        deck_list = regex.sub(r"^\W*\s*", "", deck_list, flags=regex.MULTILINE)
         # Remove extra newlines and spaces
         deck_list = regex.sub(r"\n{2,}", "\n", deck_list)
         deck_list = regex.sub(r"\s{2,}", " ", deck_list)
         return deck_list.strip()
     return None
+
 
 
 def debug_log_message(subfolder_name, file_name, text):
