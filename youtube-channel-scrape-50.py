@@ -20,7 +20,7 @@ video_urls = functions.youtube_functions.get_video_urls_from_channel_list_50(
 )
 print(video_urls)
 
-for video_url in video_urls:
+for video_url in reversed(video_urls):
     video_info = functions.youtube_functions.get_video_details(
         config_youtube_api_key, video_url
     )

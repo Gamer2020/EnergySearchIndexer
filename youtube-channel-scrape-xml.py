@@ -18,7 +18,7 @@ config_youtube_channels = config_data["config"]["youtube_channels_xml"]
 all_video_data = functions.youtube_functions.get_video_urls_from_channel_list_xml(
     config_youtube_channels
 )
-for video_data in all_video_data:
+for video_data in reversed(all_video_data):
     print(f"Video Title: {video_data['video_title']}")
     print(f"Video URL: {video_data['video_url']}")
     print(f"Channel Title: {video_data['channel_title']}")
