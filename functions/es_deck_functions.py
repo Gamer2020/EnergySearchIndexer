@@ -9,7 +9,6 @@ PTCGL_DECK_PATTERN_1 = regex.compile(
 )
 
 
-
 # Create a new deck
 def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
     headers = {
@@ -22,27 +21,48 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
     if contains_deck(video_info["video_description"]) == True:
         ptcgl_deck_list_text = get_deck(video_info["video_description"])
         video_info.pop("video_description", None)
-        new_deck_data = {
-            "deck_name": video_info["video_name"],
-            "cards": ptcgl_deck_list_text,
-            "visible": "YES",
-            "source_type": "YOUTUBE",
-            "source_info": video_info,
-            "source_identifier": video_url,
-            "featuredcard": "base1-58",
-            "format_legality": "standard",
-        }
 
-        try:
-            response = requests.post(
-                API_Target, headers=headers, data=json.dumps(new_deck_data), timeout=120
-            )
-            if response.status_code == 201:
-                return response.json()
-        except (requests.exceptions.Timeout, requests.exceptions.HTTPError) as err:
-            debug_log_message(
-                "debug", "response_errors.txt", "Error: " + str(err) + "\n"
-            )
+        decks = extract_decks(ptcgl_deck_list_text)
+
+        for i, deck in enumerate(decks):
+            print(f"Deck {i+1}:\n{deck}")
+
+            if i > 0:
+                new_deck_data = {
+                    "deck_name": video_info["video_name"],
+                    "cards": deck,
+                    "visible": "YES",
+                    "source_type": "YOUTUBE",
+                    "source_info": video_info,
+                    "source_identifier": video_url + "&deck=" + str(i + 1),
+                    "featuredcard": "base1-58",
+                    "format_legality": "standard",
+                }
+            else:
+                new_deck_data = {
+                    "deck_name": video_info["video_name"],
+                    "cards": deck,
+                    "visible": "YES",
+                    "source_type": "YOUTUBE",
+                    "source_info": video_info,
+                    "source_identifier": video_url,
+                    "featuredcard": "base1-58",
+                    "format_legality": "standard",
+                }
+
+            try:
+                response = requests.post(
+                    API_Target,
+                    headers=headers,
+                    data=json.dumps(new_deck_data),
+                    timeout=120,
+                )
+                # if response.status_code == 201:
+                #     return response.json()
+            except (requests.exceptions.Timeout, requests.exceptions.HTTPError) as err:
+                debug_log_message(
+                    "debug", "response_errors.txt", "Error: " + str(err) + "\n"
+                )
 
     else:
         print("No deck list...")
@@ -73,6 +93,25 @@ def contains_deck(deck_string):
     return bool(regex.search(PTCGL_DECK_PATTERN_1, deck_string))
 
 
+def extract_decks(text):
+    lines = text.split("\n")
+    card_lines = [line for line in lines if line.split(" ", 1)[0].isdigit()]
+    decks = []
+    current_deck = []
+    current_sum = 0
+    for line in card_lines:
+        quantity = int(line.split(" ", 1)[0])
+        current_deck.append(line)
+        current_sum += quantity
+        if current_sum == 60:
+            decks.append("\n".join(current_deck))
+            current_deck = []
+            current_sum = 0
+    if current_deck:  # handle any remaining cards
+        decks.append("\n".join(current_deck))
+    return decks
+
+
 def get_deck(deck_string):
     match = regex.search(PTCGL_DECK_PATTERN_1, deck_string)
     if match:
@@ -90,7 +129,6 @@ def get_deck(deck_string):
         deck_list = regex.sub(r"\s{2,}", " ", deck_list)
         return deck_list.strip()
     return None
-
 
 
 def debug_log_message(subfolder_name, file_name, text):
