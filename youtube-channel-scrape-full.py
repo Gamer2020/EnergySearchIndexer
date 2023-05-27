@@ -24,8 +24,8 @@ for video_url in reversed(video_urls):
     video_info = functions.youtube_functions.get_video_details(
         config_youtube_api_key, video_url
     )
-    print(video_url)
-    print(video_info)
+    # print(video_url)
+    # print(video_info)
     if (
         functions.es_deck_functions.youtube_check_deck_exists(
             video_url, config_es_api_full_url, config_es_api_key

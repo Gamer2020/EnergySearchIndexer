@@ -25,7 +25,7 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
         decks = extract_decks(ptcgl_deck_list_text)
 
         for i, deck in enumerate(decks):
-            print(f"Deck {i+1}:\n{deck}")
+            # print(f"Deck {i+1}:\n{deck}")
 
             if i > 0:
                 new_deck_data = {
