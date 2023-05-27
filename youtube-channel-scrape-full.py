@@ -13,7 +13,7 @@ config_es_api_full_url = config_es_api_base_url + config_es_api_version + "/"
 config_es_api_key = config_data["config"]["es_api_key"]
 config_youtube_api_key = config_data["config"]["youtube_api_key"]
 
-config_youtube_channels = config_data["config"]["youtube_channels_50"]
+config_youtube_channels = config_data["config"]["youtube_channels_full"]
 
 video_urls = functions.youtube_functions.get_video_urls_from_channel_list_full(
     config_youtube_api_key, config_youtube_channels
