@@ -1,6 +1,8 @@
 import re
 import requests
 import xml.etree.ElementTree as ET
+import json
+import sys
 
 
 def get_video_urls_from_channel_list_50(api_key, channel_ids):
@@ -46,6 +48,14 @@ def get_video_urls_from_channel_list_full(api_key, channel_ids):
                 params["pageToken"] = next_page_token
 
             response = requests.get(base_url, params=params)
+
+            # Check if we've hit the quota
+            if response.status_code == 403:
+                data = response.json()
+                if data["error"]["errors"][0]["reason"] == "youtube.quota":
+                    print("API quota exceeded.")
+                    sys.exit()
+
             response_json = response.json()
 
             for item in response_json["items"]:
@@ -143,6 +153,14 @@ def get_video_details(api_key, video_url):
     }
 
     response = requests.get(base_url, params=params)
+
+    # Check if we've hit the quota
+    if response.status_code == 403:
+        data = response.json()
+        if data["error"]["errors"][0]["reason"] == "youtube.quota":
+            print("API quota exceeded.")
+            sys.exit()
+
     response_json = response.json()
 
     if not response_json["items"]:
