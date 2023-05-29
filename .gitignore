@@ -1,5 +1,6 @@
 config.yml
 *.pyc
-debug/*.txt
+v1/debug/*.txt
+v2/debug/*.txt
 *.db
 *.sqlite
