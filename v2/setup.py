@@ -26,26 +26,35 @@ print("Connected to database")
 # Create a cursor object to execute SQL commands
 cursor = conn.cursor()
 
-# Create a table if it doesn't exist
+# Create the onboarded_channels table if it doesn't exist
 cursor.execute(
     """CREATE TABLE IF NOT EXISTS onboarded_channels (
-                    id TEXT PRIMARY KEY,
-                    name TEXT NOT NULL
-                )"""
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL
+    )"""
 )
-print("Table created")
+print("Table 'onboarded_channels' created")
 
-# Insert or update preloaded_channels in the database
+# Insert or update preloaded_channels in the onboarded_channels table
 for channel in preloaded_channels:
     channel_parts = channel.split("|")
     if len(channel_parts) >= 2:
         channel_id = channel_parts[0].strip()
         channel_name = channel_parts[1].strip()
-        print("Inserting channel:", channel_id, channel_name)
+        print("Inserting channel into onboarded_channels table:", channel_id, channel_name)
         cursor.execute(
             "INSERT OR REPLACE INTO onboarded_channels (id, name) VALUES (?, ?)",
             (channel_id, channel_name),
         )
+
+# Create the pending_channels table if it doesn't exist
+cursor.execute(
+    """CREATE TABLE IF NOT EXISTS pending_channels (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL
+    )"""
+)
+print("Table 'pending_channels' created")
 
 # Commit the changes and close the connection
 conn.commit()
