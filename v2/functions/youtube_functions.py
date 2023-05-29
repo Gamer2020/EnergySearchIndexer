@@ -51,10 +51,8 @@ def get_video_urls_from_channel_list_full(api_key, channel_ids):
 
             # Check if we've hit the quota
             if response.status_code == 403:
-                data = response.json()
-                if data["error"]["errors"][0]["reason"] == "youtube.quota":
-                    print("API quota exceeded.")
-                    sys.exit()
+                print("API quota exceeded.")
+                sys.exit()
 
             response_json = response.json()
 
@@ -156,10 +154,8 @@ def get_video_details(api_key, video_url):
 
     # Check if we've hit the quota
     if response.status_code == 403:
-        data = response.json()
-        if data["error"]["errors"][0]["reason"] == "youtube.quota":
-            print("API quota exceeded.")
-            sys.exit()
+        print("API quota exceeded.")
+        sys.exit()
 
     response_json = response.json()
 
@@ -181,29 +177,26 @@ def get_video_details(api_key, video_url):
 
 def get_channels_by_game(api_key, game_name):
     base_url = "https://www.googleapis.com/youtube/v3/search"
-    params = {
-        "key": api_key,
-        "q": game_name,
-        "part": "snippet",
-        "type": "channel",
-        "maxResults": 50,  # Maximum allowed by the API
-        "fields": "items(snippet(channelId,channelTitle))",
-    }
-
-    next_page_token = None
     channels = []
+    next_page_token = None
+
     while True:
-        if next_page_token:
-            params["pageToken"] = next_page_token
+        params = {
+            "key": api_key,
+            "q": game_name,
+            "part": "snippet",
+            "type": "channel",
+            "maxResults": 50,  # Maximum allowed by the API
+            "fields": "items(snippet(channelId,channelTitle)), nextPageToken",
+            "pageToken": next_page_token,
+        }
 
         response = requests.get(base_url, params=params)
 
         # Check if we've hit the quota
         if response.status_code == 403:
-            data = response.json()
-            if data["error"]["errors"][0]["reason"] == "youtube.quota":
-                print("API quota exceeded.")
-                sys.exit()
+            print("API quota exceeded.")
+            sys.exit()
 
         response_json = response.json()
 
