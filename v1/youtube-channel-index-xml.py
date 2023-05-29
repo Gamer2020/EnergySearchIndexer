@@ -1,9 +1,17 @@
 import functions.es_deck_functions
 import functions.youtube_functions
 import yaml
+import os
 
-# Read the configuration data from the file
-with open("config.yml") as config_file:
+# Get the current working directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Change the current working directory to the script's directory
+os.chdir(current_dir)
+
+# Open the file using the updated path
+config_path = os.path.join(current_dir, 'config.yml')
+with open(config_path, 'r') as config_file:
     config_data = yaml.load(config_file, Loader=yaml.FullLoader)
 
 # Access the value of the list in the configuration data

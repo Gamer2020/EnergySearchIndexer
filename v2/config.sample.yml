@@ -1,0 +1,31 @@
+config:
+  es_api_url: https://energysearch.me/api/
+  es_api_version: v1
+  es_api_key: abc1234
+  youtube_api_key: abc1234
+  preloaded_channels:
+    - "UCAhRWmekXLryJOZRUYR4seQ" #@LittleDarkFury
+    - "UClS5htrYFGOcBfJRM8awoeg" #@TheShuffleSquadTCG
+    - "UCxBdIBlBPn9qRFAMaP3sySA" #@teammoiststar6160
+    - "UC9k2vZA_jd83-4gMzRupYrQ" #@OmniPoke
+    - "UCmq8IsOvxq-SLdkPQn3_UaQ" #@jun_0712
+    - "UCJa4YOSGB25y1pXj1HzYe6g" #@TMAcademyTCG
+    - "UCExbrATu_Pqqu2v7tQg6fOQ" #@ldfptcg2022
+    - "UCcBXef4MqzAxqCnfB2iPX3Q" #@TheShuffleSquadAndFriends
+    - "UC1I8xGevDSq4howZwj2T5JA" #@GaiastormTcg
+    - "UCAQKOO0Evm2TENo0UCZR-pg" #@ForTheWinTCG
+    - "UCs1Psd-4mSgxaArphaTM2_g" #@BradenTCG
+    - "UCYCzQRsPJ_eUEXXmU_CSx2g" #@ZapdosTCG
+    - "UC18Y2Z7TqLHFvg4Fk3UkbRg" #@darkintegralgaming
+    - "UC6ZBtvoVxDJYESu7Y5mITuw" #@TheSableyes
+    - "UCkqkX4z3qLcwdhEsENmVBMQ" #@ayyhowie
+    - "UCs4NDYCeNNxZhfBiR0cZ4ng" #@HyperspaceBattle
+    - "UCUIJFJJLhxIrZVdAVdwL3bQ" #@TheJWittz
+    - "UCAWJazWMIiTmAlNkbhoRuhA" #@FrostedCaribou
+    - "UC1L4pP2MBXNDiR-qUhPagQQ" #@FatherAndSonsTV
+    - "UCtxrMQhlvT5FXgUpb1MXaTg" #@goonsquadtcg
+    - "UCkgkRXdzdVrMGO4vjLmzzjw" #@RareCandyTCG
+    - "UCc6p3ALAsltaZmXS4onBDzw" #@RahulReddy
+    - "UCEZlNLKMWQ7FV33gr9lpX9A" #@AzulGG
+    - "UC35KRaWGA7hQ5De40GG_7Fw" #@TrickyGym
+
