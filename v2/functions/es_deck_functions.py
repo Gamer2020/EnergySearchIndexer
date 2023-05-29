@@ -66,9 +66,10 @@ def youtube_create_deck(video_info, video_url, API_URL, API_TOKEN):
 
     else:
         # print("No deck list...")
-        debug_log_message(
-            "debug", "regex_deck_list.txt", "No deck list for : " + video_url + "\n"
-        )
+        # debug_log_message(
+        #     "debug", "regex_deck_list.txt", "No deck list for : " + video_url + "\n"
+        # )
+        return
 
 
 # Check If Deck Exits
