@@ -3,6 +3,7 @@ import requests
 import xml.etree.ElementTree as ET
 import json
 import sys
+import sqlite3
 
 
 def get_video_urls_from_channel_list_50(api_key, channel_ids):
@@ -213,3 +214,100 @@ def get_channels_by_game(api_key, game_name):
             break
 
     return channels
+
+
+def check_channel_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Execute a query to check if the channel ID exists in the table
+    cursor.execute(
+        "SELECT EXISTS(SELECT 1 FROM onboarded_channels WHERE id = ?)", (channel_id,)
+    )
+    result = cursor.fetchone()[0]
+
+    # Close the connection
+    conn.close()
+
+    # Return True if the channel ID exists, False otherwise
+    return bool(result)
+
+
+def check_channel_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Execute a query to check if the channel ID exists in the table
+    cursor.execute(
+        "SELECT EXISTS(SELECT 1 FROM pending_channels WHERE id = ?)", (channel_id,)
+    )
+    result = cursor.fetchone()[0]
+
+    # Close the connection
+    conn.close()
+
+    # Return True if the channel ID exists, False otherwise
+    return bool(result)
+
+
+def delete_channel_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Delete the channel from the onboarded_channels table
+    cursor.execute("DELETE FROM onboarded_channels WHERE id = ?", (channel_id,))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def delete_channel_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Delete the channel from the pending_channels table
+    cursor.execute("DELETE FROM pending_channels WHERE id = ?", (channel_id,))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+import sqlite3
+
+
+def add_channel_to_onboarded(channel_id, channel_name, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Add the channel to the onboarded_channels table
+    cursor.execute(
+        "INSERT INTO onboarded_channels (id, name) VALUES (?, ?)",
+        (channel_id, channel_name),
+    )
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def add_channel_to_pending(channel_id, channel_name, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Add the channel to the pending_channels table
+    cursor.execute(
+        "INSERT INTO pending_channels (id, name) VALUES (?, ?)",
+        (channel_id, channel_name),
+    )
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()

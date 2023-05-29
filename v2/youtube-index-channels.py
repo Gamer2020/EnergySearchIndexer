@@ -26,9 +26,23 @@ config_youtube_api_key = config_data["config"]["youtube_api_key"]
 db_file_path = os.path.join(current_dir, "youtube.sqlite")
 
 
-channels = functions.youtube_functions.get_channels_by_game(config_youtube_api_key, "Pokemon Trading Card Game Live")
+channels = functions.youtube_functions.get_channels_by_game(
+    config_youtube_api_key, "Pokemon Trading Card Game Live"
+)
 
 for channel in channels:
-    print(
-        f"Channel ID: {channel['channel_id']}, Channel Name: {channel['channel_title']}"
-    )
+    if (
+        functions.youtube_functions.check_channel_onboarded(
+            channel["channel_id"], db_file_path
+        )
+        == False
+    ):
+        if (
+            functions.youtube_functions.check_channel_pending(
+                channel["channel_id"], db_file_path
+            )
+            == False
+        ):
+            functions.youtube_functions.add_channel_to_pending(
+                channel["channel_id"], channel["channel_title"], db_file_path
+            )
