@@ -68,6 +68,38 @@ def get_video_urls_from_channel_list_full(api_key, channel_ids):
     return video_urls
 
 
+def get_video_urls_from_channel_full(api_key, channel_id):
+    video_urls = []
+
+    base_url = "https://www.googleapis.com/youtube/v3/search"
+    params = {
+        "key": api_key,
+        "channelId": channel_id,
+        "part": "snippet",
+        "type": "video",
+        "maxResults": 50,  # Maximum allowed by the API
+        "fields": "items/id/videoId, nextPageToken",
+    }
+    next_page_token = None
+    while True:
+        if next_page_token:
+            params["pageToken"] = next_page_token
+        response = requests.get(base_url, params=params)
+        # Check if we've hit the quota
+        if response.status_code == 403:
+            print("API quota exceeded.")
+            sys.exit()
+        response_json = response.json()
+        for item in response_json["items"]:
+            video_url = "https://www.youtube.com/watch?v=" + item["id"]["videoId"]
+            video_urls.append(video_url)
+        next_page_token = response_json.get("nextPageToken")
+        if not next_page_token:
+            break
+
+    return video_urls
+
+
 def get_video_urls_from_channel_list_xml(channel_ids):
     all_video_data = []
 
@@ -278,9 +310,6 @@ def delete_channel_pending(channel_id, db_file):
     conn.close()
 
 
-import sqlite3
-
-
 def add_channel_to_onboarded(channel_id, channel_name, db_file):
     # Connect to the database
     conn = sqlite3.connect(db_file)
@@ -311,3 +340,35 @@ def add_channel_to_pending(channel_id, channel_name, db_file):
     # Commit the changes and close the connection
     conn.commit()
     conn.close()
+
+
+def get_channel_name_from_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Retrieve the channel name from the onboarded_channels table
+    cursor.execute("SELECT name FROM onboarded_channels WHERE id = ?", (channel_id,))
+    result = cursor.fetchone()
+
+    # Close the connection
+    conn.close()
+
+    # Return the channel name if found, or None if not found
+    return result[0] if result else None
+
+
+def get_channel_name_from_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Retrieve the channel name from the pending_channels table
+    cursor.execute("SELECT name FROM pending_channels WHERE id = ?", (channel_id,))
+    result = cursor.fetchone()
+
+    # Close the connection
+    conn.close()
+
+    # Return the channel name if found, or None if not found
+    return result[0] if result else None
