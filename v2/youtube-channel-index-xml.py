@@ -46,13 +46,13 @@ all_video_data = functions.youtube_functions.get_video_urls_from_channel_list_xm
     channel_ids
 )
 for video_data in reversed(all_video_data):
-    print(f"Video Title: {video_data['video_title']}")
-    print(f"Video URL: {video_data['video_url']}")
-    print(f"Channel Title: {video_data['channel_title']}")
-    print(f"Channel URL: {video_data['channel_url']}")
-    print(f"Publish Date: {video_data['publish_date']}")
-    print(f"Video Description: {video_data['video_description']}")
-    print()
+    # print(f"Video Title: {video_data['video_title']}")
+    # print(f"Video URL: {video_data['video_url']}")
+    # print(f"Channel Title: {video_data['channel_title']}")
+    # print(f"Channel URL: {video_data['channel_url']}")
+    # print(f"Publish Date: {video_data['publish_date']}")
+    # print(f"Video Description: {video_data['video_description']}")
+    # print()
 
     video_info = {
         "video_name": video_data["video_title"],
