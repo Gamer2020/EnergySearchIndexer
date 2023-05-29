@@ -18,7 +18,7 @@ config_youtube_channels = config_data["config"]["youtube_channels_full"]
 video_urls = functions.youtube_functions.get_video_urls_from_channel_list_full(
     config_youtube_api_key, config_youtube_channels
 )
-print(video_urls)
+# print(video_urls)
 
 for video_url in reversed(video_urls):
     video_info = functions.youtube_functions.get_video_details(
