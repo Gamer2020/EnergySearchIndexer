@@ -177,3 +177,46 @@ def get_video_details(api_key, video_url):
     }
 
     return video_details
+
+
+def get_channels_by_game(api_key, game_name):
+    base_url = "https://www.googleapis.com/youtube/v3/search"
+    params = {
+        "key": api_key,
+        "q": game_name,
+        "part": "snippet",
+        "type": "channel",
+        "maxResults": 50,  # Maximum allowed by the API
+        "fields": "items(snippet(channelId,channelTitle))",
+    }
+
+    next_page_token = None
+    channels = []
+    while True:
+        if next_page_token:
+            params["pageToken"] = next_page_token
+
+        response = requests.get(base_url, params=params)
+
+        # Check if we've hit the quota
+        if response.status_code == 403:
+            data = response.json()
+            if data["error"]["errors"][0]["reason"] == "youtube.quota":
+                print("API quota exceeded.")
+                sys.exit()
+
+        response_json = response.json()
+
+        for item in response_json["items"]:
+            channel_info = {
+                "channel_id": item["snippet"]["channelId"],
+                "channel_title": item["snippet"]["channelTitle"],
+            }
+            if channel_info not in channels:
+                channels.append(channel_info)
+
+        next_page_token = response_json.get("nextPageToken")
+        if not next_page_token:
+            break
+
+    return channels
