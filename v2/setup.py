@@ -10,18 +10,19 @@ os.chdir(current_dir)
 
 # Open the file using the updated path
 config_path = os.path.join(current_dir, "config.yml")
-print("Config path:", config_path)
 
 with open(config_path, "r") as config_file:
     yaml_data = yaml.safe_load(config_file)
 
+#######################################
+#            YouTube - START
+#######################################
+
 # Get the preloaded_channels from the YAML data
 preloaded_channels = yaml_data["config"]["preloaded_channels"]
-print("Preloaded channels:", preloaded_channels)
 
 # Connect to the database (creates a new file if it doesn't exist)
 conn = sqlite3.connect("youtube.sqlite")
-print("Connected to database")
 
 # Create a cursor object to execute SQL commands
 cursor = conn.cursor()
@@ -33,7 +34,6 @@ cursor.execute(
         name TEXT NOT NULL
     )"""
 )
-print("Table 'onboarded_channels' created")
 
 # Insert or update preloaded_channels in the onboarded_channels table
 for channel in preloaded_channels:
@@ -41,7 +41,6 @@ for channel in preloaded_channels:
     if len(channel_parts) >= 2:
         channel_id = channel_parts[0].strip()
         channel_name = channel_parts[1].strip()
-        print("Inserting channel into onboarded_channels table:", channel_id, channel_name)
         cursor.execute(
             "INSERT OR REPLACE INTO onboarded_channels (id, name) VALUES (?, ?)",
             (channel_id, channel_name),
@@ -54,9 +53,11 @@ cursor.execute(
         name TEXT NOT NULL
     )"""
 )
-print("Table 'pending_channels' created")
 
 # Commit the changes and close the connection
 conn.commit()
 conn.close()
-print("Database updated successfully")
+
+#######################################
+#             YouTube - END
+#######################################
