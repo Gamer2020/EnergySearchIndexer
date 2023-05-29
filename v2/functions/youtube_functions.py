@@ -196,7 +196,7 @@ def get_channels_by_game(api_key, game_name):
         # Check if we've hit the quota
         if response.status_code == 403:
             print("API quota exceeded.")
-            sys.exit()
+            return channels
 
         response_json = response.json()
 
