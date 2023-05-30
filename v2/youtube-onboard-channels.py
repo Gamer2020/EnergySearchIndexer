@@ -66,7 +66,7 @@ for channel_id in channel_ids:
         functions.youtube_functions.check_channel_onboarded(channel_id, db_file_path)
         == False
     ):
-        functions.es_deck_functions.add_channel_to_onboarded(
+        functions.youtube_functions.add_channel_to_onboarded(
             channel_id,
             functions.youtube_functions.get_channel_name_from_pending(
                 channel_id, db_file_path
@@ -78,7 +78,7 @@ for channel_id in channel_ids:
         functions.youtube_functions.check_channel_pending(channel_id, db_file_path)
         == True
     ):
-        functions.es_deck_functions.delete_channel_pending(
+        functions.youtube_functions.delete_channel_pending(
             channel_id,
             db_file_path,
         )
