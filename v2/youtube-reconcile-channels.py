@@ -61,24 +61,3 @@ for channel_id in channel_ids:
             functions.es_deck_functions.youtube_create_deck(
                 video_info, video_url, config_es_api_full_url, config_es_api_key
             )
-
-    if (
-        functions.youtube_functions.check_channel_onboarded(channel_id, db_file_path)
-        == False
-    ):
-        functions.youtube_functions.add_channel_to_onboarded(
-            channel_id,
-            functions.youtube_functions.get_channel_name_from_pending(
-                channel_id, db_file_path
-            ),
-            db_file_path,
-        )
-
-    if (
-        functions.youtube_functions.check_channel_pending(channel_id, db_file_path)
-        == True
-    ):
-        functions.youtube_functions.delete_channel_pending(
-            channel_id,
-            db_file_path,
-        )
