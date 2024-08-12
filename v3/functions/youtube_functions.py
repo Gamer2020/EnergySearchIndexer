@@ -328,3 +328,128 @@ def get_channels_by_game(api_key, game_name):
             break
 
     return channels
+
+def check_channel_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Execute a query to check if the channel ID exists in the table
+    cursor.execute(
+        "SELECT EXISTS(SELECT 1 FROM onboarded_channels WHERE id = ?)", (channel_id,)
+    )
+    result = cursor.fetchone()[0]
+
+    # Close the connection
+    conn.close()
+
+    # Return True if the channel ID exists, False otherwise
+    return bool(result)
+
+
+def check_channel_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Execute a query to check if the channel ID exists in the table
+    cursor.execute(
+        "SELECT EXISTS(SELECT 1 FROM pending_channels WHERE id = ?)", (channel_id,)
+    )
+    result = cursor.fetchone()[0]
+
+    # Close the connection
+    conn.close()
+
+    # Return True if the channel ID exists, False otherwise
+    return bool(result)
+
+
+def delete_channel_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Delete the channel from the onboarded_channels table
+    cursor.execute("DELETE FROM onboarded_channels WHERE id = ?", (channel_id,))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def delete_channel_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Delete the channel from the pending_channels table
+    cursor.execute("DELETE FROM pending_channels WHERE id = ?", (channel_id,))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def add_channel_to_onboarded(channel_id, channel_name, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Add the channel to the onboarded_channels table
+    cursor.execute(
+        "INSERT INTO onboarded_channels (id, name) VALUES (?, ?)",
+        (channel_id, channel_name),
+    )
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def add_channel_to_pending(channel_id, channel_name, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Add the channel to the pending_channels table
+    cursor.execute(
+        "INSERT INTO pending_channels (id, name) VALUES (?, ?)",
+        (channel_id, channel_name),
+    )
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def get_channel_name_from_onboarded(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Retrieve the channel name from the onboarded_channels table
+    cursor.execute("SELECT name FROM onboarded_channels WHERE id = ?", (channel_id,))
+    result = cursor.fetchone()
+
+    # Close the connection
+    conn.close()
+
+    # Return the channel name if found, or None if not found
+    return result[0] if result else None
+
+
+def get_channel_name_from_pending(channel_id, db_file):
+    # Connect to the database
+    conn = sqlite3.connect(db_file)
+    cursor = conn.cursor()
+
+    # Retrieve the channel name from the pending_channels table
+    cursor.execute("SELECT name FROM pending_channels WHERE id = ?", (channel_id,))
+    result = cursor.fetchone()
+
+    # Close the connection
+    conn.close()
+
+    # Return the channel name if found, or None if not found
+    return result[0] if result else None
