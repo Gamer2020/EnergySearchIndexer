@@ -172,23 +172,18 @@ def get_video_urls_from_channel_list_xml(channel_ids):
 
     for channel_id in channel_ids:
         url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
-        request_hash = url
-        cached_response = get_cached_response(request_hash)
+        
+        response = requests.get(url)
 
-        if cached_response:
-            root = ET.fromstring(cached_response)
-        else:
-            response = requests.get(url)
+        if response.status_code != 200:
+            print(
+                f"Error: Unable to fetch data for channel_id {channel_id}. Status code: {response.status_code}"
+            )
+            continue
 
-            if response.status_code != 200:
-                print(
-                    f"Error: Unable to fetch data for channel_id {channel_id}. Status code: {response.status_code}"
-                )
-                continue
+        xml_content = response.content
+        root = ET.fromstring(xml_content)
 
-            xml_content = response.content
-            root = ET.fromstring(xml_content)
-            cache_response(request_hash, xml_content.decode('utf-8'))
 
         for entry in root.findall("{http://www.w3.org/2005/Atom}entry"):
             video_data = {}
